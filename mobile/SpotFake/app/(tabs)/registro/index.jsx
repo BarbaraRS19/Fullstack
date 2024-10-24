@@ -18,11 +18,11 @@ export default SingUp = () => {
         
     
         const Registro = async () => {
-            if (nome && sobrenome && email && senha) {
+            if (nome && sobrenome && dataNascimento && email && senha) {
                 try {
                     const response = await axios.post(
-                        'https://taskhub-s37f.onrender.com/auth/signup',
-                        { "name": nome, "sobrenome": sobrenome, "dataNascimento": dataNascimento, "email": email, "password": senha }
+                        'http://localhost:8000/registro',
+                        { "nome": nome, "sobrenome": sobrenome, "dataNascimento": dataNascimento, "email": email, "senha": senha }
                     );
                     if (response.status === 200){
                         alert('Usuário criado com sucesso!')

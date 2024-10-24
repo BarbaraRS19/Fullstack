@@ -11,12 +11,12 @@ export default SingUp = () => {
         const MudarSenha = (senha) => setSenha(senha);
         
     
-        const Registro = async () => {
+        const Login = async () => {
             if (email && senha) {
                 try {
                     const response = await axios.post(
-                        'https://taskhub-s37f.onrender.com/auth/signup',
-                        {"email": email, "password": senha }
+                        'http://localhost:8000/login',
+                        {"email": email, "senha": senha }
                     );
                     if (response.status === 200){
                         alert('Usuário criado com sucesso!')
@@ -54,7 +54,7 @@ export default SingUp = () => {
             <Link href="../" >
             <br></br><Text>Esqueci minha senha</Text>
             </Link>
-        <Pressable style={style.button} onPress={Registro}>
+        <Pressable style={style.button} onPress={Login}>
         <Text> Acessar </Text>
         </Pressable>
         <Link href="./registro" >

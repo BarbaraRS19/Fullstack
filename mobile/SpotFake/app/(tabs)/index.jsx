@@ -31,11 +31,11 @@ export default SingUp = () => {
     
     return <SafeAreaView style={style.container}>
     <View style={style.body}>
-    <View >
+    <View style={style.log} >
         <Image 
         style={style.image}
         source={require('../../assets/images/reprodutor-de-musica.png')}/>
-        <Text style={style.text}>PlaayShare</Text>
+        <Text style={style.logo}>PlaayShare</Text>
     </View>
         <Text style={style.text}>Login</Text>
         <TextInput 
@@ -51,14 +51,14 @@ export default SingUp = () => {
                 secureTextEntry={true}
                 placeholder=" Senha"
         />
-            <Link href="../" >
-            <br></br><Text>Esqueci minha senha</Text>
+            <Link href="../" style={style.link}>
+           <Text style={style.link}>Esqueci minha senha</Text>
             </Link>
         <Pressable style={style.button} onPress={Login}>
-        <Text> Acessar </Text>
+        <Text style={style.butt}> Acessar </Text>
         </Pressable>
         <Link href="./registro" >
-                <br></br><Text>Cadastrar!</Text>
+                <Text style={style.butt2}>Cadastrar!</Text>
             </Link>
     </View>
     </SafeAreaView>
@@ -67,11 +67,9 @@ export default SingUp = () => {
 const style = StyleSheet.create({
     container: {
         display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
+        backgroundColor: '#F5EEF8',
         height: '100%',
-        width: '100%',
-        backgroundColor: '#f2f3f4'
+        width: '100%',  
     },
     body: {
         display: 'flex',
@@ -80,21 +78,55 @@ const style = StyleSheet.create({
         height: '100%',
         width: '100%',  
     },
-    text: {
-        fontSize: 50,
-        color: '#4F4F4F',
-        marginBottom: 30,
+    image: {
+        width: 45,
+        height: 45
     },
-    input: {
-        border: '1px solid black',
-        fontSize: 15,
+    log: {
+        flexDirection: 'row',
+        gap: 10
+    },
+    logo: {
+        fontSize: 60,
+        color: '#5B2C6F',
+        fontFamily: 'Mystery Quest',
         marginBottom: 20,
     },
-    button: {
-        border: '2px solid black',   
+    text: {
+        fontSize: 45,
+        color: '#8E44AD',
+        fontFamily: 'Mystery Quest',
+        marginBottom: 20,
     },
-    image: {
-        width: 10,
-        height: 10
-    }
+    input: {
+        border: '1px solid #E8DAEF',
+        backgroundColor: '#E8DAEF',
+        fontSize: 15,
+        marginBottom: 15,
+        borderRadius: 50,
+        color: '#5B2C6F',
+        display: 'flex',
+        justifyContent: 'center',
+        textAlign: 'center',
+        fontSize: 20,
+    },
+    link: {
+        color: '#5B2C6F',
+        fontSize: 10,
+        marginBottom: 30,
+    },
+    button: {
+        border: '1px solid #5B2C6F',   
+        borderRadius: 50,
+        backgroundColor: '#5B2C6F',
+        marginBottom: 20
+    },
+    butt: {
+        color: 'white',
+        fontSize: 20,
+    },
+    butt2: {
+        color: '#5B2C6F',
+        fontSize: 20,
+    },
 })

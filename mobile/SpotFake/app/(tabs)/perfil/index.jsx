@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {View, Text, StyleSheet, Pressable, Image, ScrollView} from "react-native";
 import { Link } from "expo-router";
+import { AppContext } from "../../../scripts/AppContext";
 
-export default Perfil = () => {
-    const [ ] = useState('');
+export default Perfil = () => {''
+    const [userInfo, setUserInfo] = useContext(AppContext);
 
     return <ScrollView style={style.container}>
     <View style={style.body}>
     <View style={style.log} >
+    <Link href="../" style={style.link}>
         <Image 
         style={style.image}
         source={require('../../../assets/images/seta-esquerda.png')}/>
+    </Link>
         <Image 
         style={style.image}
         source={require('../../../assets/images/configuracao-do-usuario.png')}/>
@@ -18,7 +21,7 @@ export default Perfil = () => {
     <Image 
         style={style.foto}
         source={require('../../../assets/images/perfil-de-usuario.png')}/>
-    <Text style={style.nome}>Flávia Neto</Text>
+    <Text style={style.nome}>Bárbara Rosa</Text>
     
     </View>
     </ScrollView>

@@ -74,9 +74,11 @@ export default SingUp = () => {
                 secureTextEntry={true}
                 placeholder=" Senha"
         />
+        <Link href="./perfil" style={style.link}>
         <Pressable style={style.button} onPress={Registro}>
         <Text style={style.butt}> Concluir </Text>
         </Pressable>
+        </Link>
         <Link href="../" style={style.link}>
                 <Text style={style.link}>Clique para Voltar!</Text>
             </Link>

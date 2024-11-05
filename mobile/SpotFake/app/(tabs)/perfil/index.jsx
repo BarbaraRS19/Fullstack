@@ -4,25 +4,31 @@ import { Link } from "expo-router";
 import { AppContext } from "../../../scripts/AppContext";
 
 export default Perfil = () => {''
-    const [userInfo, setUserInfo] = useContext(AppContext);
+const {userInfo, setUserInfo} = useContext(AppContext);
 
     return <ScrollView style={style.container}>
     <View style={style.body}>
     <View style={style.log} >
-    <Link href="../" style={style.link}>
+    <Link href="/" style={style.link}>
         <Image 
         style={style.image}
         source={require('../../../assets/images/seta-esquerda.png')}/>
     </Link>
+    <Link href="../pagamento" style={style.link}>
         <Image 
         style={style.image}
         source={require('../../../assets/images/configuracao-do-usuario.png')}/>
+    </Link>
     </View>
     <Image 
         style={style.foto}
         source={require('../../../assets/images/perfil-de-usuario.png')}/>
     <Text style={style.nome}>Bárbara Rosa</Text>
-    
+    <Text style={style.nome}>{userInfo.nome}</Text>
+    <Text style={style.nome}>{userInfo.sobrenome}</Text>
+    <Text style={style.nome}>{userInfo.email}</Text>
+    <Text style={style.nome}>{userInfo.senha}</Text>
+    <Text style={style.nome}>{userInfo.status}</Text>
     </View>
     </ScrollView>
 }

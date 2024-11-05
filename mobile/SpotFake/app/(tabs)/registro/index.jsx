@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {View, Text, StyleSheet, TextInput, Pressable, Image} from "react-native";
 import axios from "axios";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 
 export default SingUp = () => {
         const [nome, setNome] = useState('');
@@ -20,14 +20,16 @@ export default SingUp = () => {
             if (nome && sobrenome && dataNascimento && email && senha) {
                 try {
                     const response = await axios.post(
-                        'http://localhost:8000/registro',
+                        'http://localhost:8000/autenticacao/registro',
                         { "nome": nome, "sobrenome": sobrenome, "dataNascimento": dataNascimento, "email": email, "senha": senha }
                     );
                     if (response.status === 200){
                         alert('Usuário criado com sucesso!')
+                        router.push('/')
                     }
                 } catch (error) {
                     alert('Erro ao criar usuário!', error);
+                    router.push('/')
                 }
             } else {
                 alert('Dados incompletos, revise-os!');
@@ -74,11 +76,10 @@ export default SingUp = () => {
                 secureTextEntry={true}
                 placeholder=" Senha"
         />
-        <Link href="./perfil" style={style.link}>
         <Pressable style={style.button} onPress={Registro}>
-        <Text style={style.butt}> Concluir </Text>
+            <Text style={style.butt}> Concluir </Text>
         </Pressable>
-        </Link>
+
         <Link href="../" style={style.link}>
                 <Text style={style.link}>Clique para Voltar!</Text>
             </Link>

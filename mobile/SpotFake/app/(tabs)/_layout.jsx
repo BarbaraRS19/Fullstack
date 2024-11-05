@@ -1,6 +1,6 @@
 import React from "react";
 import { Slot } from "expo-router";
-import { AppProvider } from "../scripts/AppContext";
+import { AppProvider } from "../../scripts/AppContext";
 
 export default Layout = () => {
     return(

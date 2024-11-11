@@ -69,6 +69,9 @@ export default SingUp = () => {
             <Link href="./registro" >
                 <Text style={style.butt2}>Cadastrar!</Text>
             </Link>
+            <Link href="./perfil" >
+                <Text style={style.butt2}>perfil!</Text>
+            </Link>
         </View>
     </SafeAreaView>
 }

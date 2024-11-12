@@ -23,12 +23,56 @@ const options = {
 export default Perfil = () => {
     const { userInfo, setUserInfo } = useContext(AppContext);
     const [image, setImage] = useState('../../../assets/images/perfil-de-usuario.png')
+    const [novaImagem, setNovaImagem] = useState(false)
 
-    const envia = async () => {
-        await upload(cld, {
-            file: 'imageFile.jpg', options: options => {
+    const enviar = async () => {
+        try{
+            const data = {
+                "file": image,
+                "upload_preset": 'ml_default',
+                "name": 'teste'
             }
-        })
+            const res = await fetch('https://api.cloudinary.com/v1_1/dtsbwcpgv/upload', {
+                method:'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            console.log(result.url)
+            enviarBD(result.url)
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
+
+    const enviarBD = async (url) => {
+        try{
+            const data = {
+                "file": image,
+                "upload_preset": 'ml_default',
+                "name": 'teste'
+            }
+            const res = await fetch('http://localhost:8000/1', {
+                method:'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    url: url
+                })
+            });
+            console.log(res)
+            if(res.status === 200){
+            console.log(res)
+            }
+            else if(res.status === 409){
+                console.log(erro)
+            }
+        }        catch (e) {
+            console.log(e)
     }
 
     const pickImage = async () => {
@@ -41,6 +85,7 @@ export default Perfil = () => {
         console.log(result);
         if (!result.canceled) {
             setImage(result.assets[0].uri);
+            setNovaImagem(true)
         }
     }
 
@@ -60,6 +105,8 @@ export default Perfil = () => {
             </View>
             <TouchableOpacity onPress={pickImage}>
                 {image && <Image source={{ uri: image }} style={style.img} />}
+                {novaImagem && <Pressable onPress={enviar} style={style.butt}>
+            <Text style={style.descricao}>Editar Foto</Text></Pressable>}
             </TouchableOpacity>
             <Text style={style.nome}>{userInfo.nome}</Text>
             <Text style={style.descricao}>{userInfo.sobrenome}</Text>
@@ -87,8 +134,9 @@ const style = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignSelf: 'center',
-        width: 110,
-        height: 110
+        width: 100,
+        height: 100, 
+        borderRadius: 50,
     },
     log: {
         flexDirection: 'row',
@@ -146,5 +194,5 @@ const style = StyleSheet.create({
     },
     butt2: {
 
-    },
-})
+    }
+})}

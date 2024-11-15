@@ -1,3 +1,4 @@
+
 import React, { useState, useContext, useEffect } from "react";
 import { View, Text, StyleSheet, Pressable, Image, ScrollView, SafeAreaView, Button, TouchableOpacity } from "react-native";
 import { Link } from "expo-router";
@@ -22,100 +23,110 @@ const options = {
 
 export default Perfil = () => {
     const { userInfo, setUserInfo } = useContext(AppContext);
-    const [image, setImage] = useState('../../../assets/images/perfil-de-usuario.png')
-    const [novaImagem, setNovaImagem] = useState(false)
+    const [image, setImage] = useState('../../../assets/images/perfil-de-usuario.png');
+    const [novaImagem, setNovaImagem] = useState(false);
 
     const enviar = async () => {
-        try{
+        try {
             const data = {
                 "file": image,
                 "upload_preset": 'ml_default',
                 "name": 'teste'
             }
             const res = await fetch('https://api.cloudinary.com/v1_1/dtsbwcpgv/upload', {
-                method:'POST',
+                method: 'POST',
                 headers: {
                     'content-type': 'application/json'
                 },
                 body: JSON.stringify(data)
             });
             const result = await res.json();
-            console.log(result.url)
-            enviarBD(result.url)
+            console.log(result.url);
+            enviarBD(result.url);
+        } catch (e) {
+            console.log(e);
         }
-        catch (e) {
-            console.log(e)
-        }
-    }
+    };
 
     const enviarBD = async (url) => {
-        try{
-            const data = {
-                "file": image,
-                "upload_preset": 'ml_default',
-                "name": 'teste'
-            }
+        try {
             const res = await fetch('http://localhost:8000/1', {
-                method:'POST',
+                method: 'POST',
                 headers: {
                     'content-type': 'application/json'
                 },
-                body: JSON.stringify({
-                    url: url
-                })
+                body: JSON.stringify({ url: url })
             });
-            console.log(res)
-            if(res.status === 200){
-            console.log(res)
+            const resData = await res.json();
+            console.log(resData);
+            if (res.status === 200) {
+                console.log('Imagem enviada com sucesso!');
+            } else if (res.status === 409) {
+                console.log('Erro no envio: conflito de dados.');
             }
-            else if(res.status === 409){
-                console.log(erro)
-            }
-        }        catch (e) {
-            console.log(e)
-    }
+        } catch (e) {
+            console.log('Erro ao enviar imagem para o BD:', e);
+        }
+    };
 
     const pickImage = async () => {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+            alert('Desculpe, precisamos da permissão para acessar a galeria!');
+            return;
+        }
+
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
         });
+
         console.log(result);
         if (!result.canceled) {
             setImage(result.assets[0].uri);
-            setNovaImagem(true)
+            setNovaImagem(true);
         }
-    }
+    };
 
-    return <ScrollView style={style.container}>
-        <View style={style.body}>
-            <View style={style.log} >
-                <Link href="/" style={style.link}>
-                    <Image
-                        style={style.image}
-                        source={require('../../../assets/images/seta-esquerda.png')} />
-                </Link>
-                <Link href="../pagamento" style={style.link}>
-                    <Image
-                        style={style.image}
-                        source={require('../../../assets/images/configuracao-do-usuario.png')} />
-                </Link>
+    return (
+        <ScrollView style={style.container}>
+            <View style={style.body}>
+                <View style={style.log}>
+                    <Link href="/" style={style.link}>
+                        <Image
+                            style={style.image}
+                            source={require('../../../assets/images/seta-esquerda.png')} />
+                    </Link>
+                    <Link href="../pagamento" style={style.link}>
+                        <Image
+                            style={style.image}
+                            source={require('../../../assets/images/configuracao-do-usuario.png')} />
+                    </Link>
+                </View>
+                <TouchableOpacity onPress={pickImage}>
+                    <Image source={{ uri: image }} style={style.img} />
+                    {novaImagem && (
+                        <Pressable onPress={enviar} style={style.butt}>
+                            <Text style={style.descricao}>Editar Foto</Text>
+                        </Pressable>
+                    )}
+                </TouchableOpacity> <TextInput
+              style={styles.input}
+              value={data.username}
+              onChangeText={(text) => setData({ ...data, username: text })}
+            />
+          
+                <Text style={style.nome}>{userInfo.nome}</Text>
+                <Text style={style.descricao}>{userInfo.sobrenome}</Text>
+                <Text style={style.descricao}>{userInfo.email}</Text>
+                <Text style={style.descricao}>{userInfo.senha}</Text>
+                <Text style={style.descricao}>{userInfo.status}</Text>
             </View>
-            <TouchableOpacity onPress={pickImage}>
-                {image && <Image source={{ uri: image }} style={style.img} />}
-                {novaImagem && <Pressable onPress={enviar} style={style.butt}>
-            <Text style={style.descricao}>Editar Foto</Text></Pressable>}
-            </TouchableOpacity>
-            <Text style={style.nome}>{userInfo.nome}</Text>
-            <Text style={style.descricao}>{userInfo.sobrenome}</Text>
-            <Text style={style.descricao}>{userInfo.email}</Text>
-            <Text style={style.descricao}>{userInfo.senha}</Text>
-            <Text style={style.descricao}>{userInfo.status}</Text>
-        </View>
-    </ScrollView>
-}
+        </ScrollView>
+    );
+};
 
 const style = StyleSheet.create({
     container: {
@@ -123,9 +134,7 @@ const style = StyleSheet.create({
         backgroundColor: '#F5EEF8',
         width: '100%',
     },
-    body: {
-
-    },
+    body: {},
     image: {
         width: 45,
         height: 45
@@ -135,20 +144,13 @@ const style = StyleSheet.create({
         justifyContent: 'center',
         alignSelf: 'center',
         width: 100,
-        height: 100, 
+        height: 100,
         borderRadius: 50,
     },
     log: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 20
-    },
-    foto: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignSelf: 'center',
-        width: 110,
-        height: 110
     },
     nome: {
         display: 'flex',
@@ -170,18 +172,6 @@ const style = StyleSheet.create({
         marginTop: 5,
         marginBottom: 20,
     },
-    text: {
-
-    },
-    input: {
-
-    },
-    link: {
-
-    },
-    button: {
-
-    },
     butt: {
         display: 'flex',
         justifyContent: 'center',
@@ -192,7 +182,4 @@ const style = StyleSheet.create({
         marginTop: 5,
         marginBottom: 20,
     },
-    butt2: {
-
-    }
-})}
+});

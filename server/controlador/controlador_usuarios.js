@@ -19,16 +19,21 @@ const pega = async (req, res) => {
     res.send(user)
 }
 
-const atualizaUser = async (req, res) => {
-      if (req.files) {
-        const imageFile = req.files['profileImage'][0];
-        const upload = await uploadImage(imageFile);
-        if (upload !== 'erro') {
-          updatedData.profileImage = upload;
-        } else {
-          return res.status(500).json({ error: 'Erro ao fazer upload' });
-        }
-      }
-    }
+const trocaImg = async (req, res) => {
+  const user_id = req.params.id
+  const nova_img_url = req.body.url
+  if (!nova_img_url) {
+      res.status(400).send('Imagem nao encontrada')
+      return
+  }
+  const user = await User.findOne({where:{id: user_id}})
+  if(!user){
+      res.status(404).send('User nao encontrada')
+      return
+  }
+  user.profile_image = nova_img_url
+  await user.save()
+  res.status(200).send(user)
+}
 
 export { lista, deleta, pega, atualizaUser};

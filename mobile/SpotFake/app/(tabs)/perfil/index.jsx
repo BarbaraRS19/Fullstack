@@ -1,6 +1,6 @@
 
 import React, { useState, useContext, useEffect } from "react";
-import { View, Text, StyleSheet, Pressable, Image, ScrollView, SafeAreaView, Button, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Pressable, Image, ScrollView, Modal, TouchableOpacity, TextInput } from "react-native";
 import { Link } from "expo-router";
 import { AppContext } from "../../../scripts/AppContext";
 //import { AdvancedImage } from "cloudinary-react-native";
@@ -25,6 +25,15 @@ export default Perfil = () => {
     const { userInfo, setUserInfo } = useContext(AppContext);
     const [image, setImage] = useState('../../../assets/images/perfil-de-usuario.png');
     const [novaImagem, setNovaImagem] = useState(false);
+    const [modal, setModal] = useState(false)
+    const [novaSenha, setNovaSenha] = useState('')
+    const [confirma, setConfirma] = useState('')
+
+    useEffect(() => {
+        if (userInfo.image) {
+            setImage(userInfo.image)
+        }
+    }, [])
 
     const enviar = async () => {
         try {
@@ -43,6 +52,9 @@ export default Perfil = () => {
             const result = await res.json();
             console.log(result.url);
             enviarBD(result.url);
+            console.log(userInfo)
+            setUserInfo({ ...userInfo, image: result.url })
+            await mudaSenha(result)
         } catch (e) {
             console.log(e);
         }
@@ -50,7 +62,7 @@ export default Perfil = () => {
 
     const enviarBD = async (url) => {
         try {
-            const res = await fetch('http://localhost:8000/1', {
+            const res = await fetch('http://localhost:8000/', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
@@ -62,10 +74,10 @@ export default Perfil = () => {
             if (res.status === 200) {
                 console.log('Imagem enviada com sucesso!');
             } else if (res.status === 409) {
-                console.log('Erro no envio: conflito de dados.');
+                console.log('Erro');
             }
         } catch (e) {
-            console.log('Erro ao enviar imagem para o BD:', e);
+            console.log('Erro', e);
         }
     };
 
@@ -90,6 +102,27 @@ export default Perfil = () => {
         }
     };
 
+    const mudaSenha = async () => {
+        if (novaSenha != confirma){
+            alert('Senhas Distintas')
+            return
+        }
+        const res = await fetch(`http://localhost:8000/autenticacao/mudarSenha/${userInfo.id}`, {
+                method: 'PUT',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify({novaSenha: novaSenha})
+            });
+        if (res.status != 200){
+            alert('Ocorreu um Erro')
+            setModal(!modal)
+            return
+        }
+        alert('Senha Alterada')
+        setModal(!modal)
+    }
+
     return (
         <ScrollView style={style.container}>
             <View style={style.body}>
@@ -112,21 +145,55 @@ export default Perfil = () => {
                             <Text style={style.descricao}>Editar Foto</Text>
                         </Pressable>
                     )}
-                </TouchableOpacity> <TextInput
-              style={styles.input}
-              value={data.username}
-              onChangeText={(text) => setData({ ...data, username: text })}
+                </TouchableOpacity> 
+            <TextInput
+              style={style.input}
+              value={userInfo.username}
+              onChangeText={(text) => setData({ ...userInfo, username: text })}
             />
-          
                 <Text style={style.nome}>{userInfo.nome}</Text>
                 <Text style={style.descricao}>{userInfo.sobrenome}</Text>
                 <Text style={style.descricao}>{userInfo.email}</Text>
                 <Text style={style.descricao}>{userInfo.senha}</Text>
                 <Text style={style.descricao}>{userInfo.status}</Text>
+
+                <Pressable onPress={mudaSenha} style={style.butt}>
+                            <Text style={style.descricao}>Alterar Senha</Text>
+                        </Pressable>
+                        <Modal
+                            animationType="none"
+                            transparent={true}
+                            visible={modal}
+                            onRequestClose={() => {
+                                setModal(!modal);
+                            }}>
+                            <View>
+                                <View style={style.modalView}>
+                                    <TextInput
+                                        placeholder='Nova senha'
+                                        style={style.input}
+                                        onChangeText={setNovaSenha}
+                                        value={novaSenha}
+                                        secureTextEntry={true}
+                                    />
+                                    <TextInput
+                                        placeholder='Confirmar senha'
+                                        style={style.input}
+                                        onChangeText={setConfirma}
+                                        value={confirma}
+                                        secureTextEntry={true}
+                                    />
+                                    <Pressable onPress={mudaSenha} style={style.butt}>
+                                        <Text style={style.descricao}>Alterar</Text>
+                                    </Pressable>
+            </View>
+            </View>
+            </Modal>
             </View>
         </ScrollView>
     );
 };
+
 
 const style = StyleSheet.create({
     container: {

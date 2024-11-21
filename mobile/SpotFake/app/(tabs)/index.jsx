@@ -72,6 +72,9 @@ export default SingUp = () => {
             <Link href="./perfil" >
                 <Text style={style.butt2}>perfil!</Text>
             </Link>
+            <Link href="./home" >
+                <Text style={style.butt2}>home!</Text>
+            </Link>
         </View>
     </SafeAreaView>
 }

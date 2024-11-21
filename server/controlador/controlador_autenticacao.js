@@ -49,7 +49,7 @@ const login = async (req, res) => {
 
  const mudarSenha = async(req, res) => {
     const user_id = req.params.id
-    const nova_senha = req.body.novaSenha
+    const {nova_senha} = req.body
     if (!nova_senha) {
         res.status(400).send('Todos os campos devem ser preenchidos')
         return

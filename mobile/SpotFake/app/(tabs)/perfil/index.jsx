@@ -103,24 +103,25 @@ export default Perfil = () => {
     };
 
     const mudaSenha = async () => {
-        if (novaSenha != confirma){
+        if (novaSenha !== confirma) {
             alert('Senhas Distintas')
             return
         }
+        console.log(userInfo)
         const res = await fetch(`http://localhost:8000/autenticacao/mudarSenha/${userInfo.id}`, {
-                method: 'PUT',
-                headers: {
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify({novaSenha: novaSenha})
-            });
-        if (res.status != 200){
+            method: 'PUT',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({ novaSenha: novaSenha })
+        });
+        if (res.status != 200) {
             alert('Ocorreu um Erro')
-            setModal(!modal)
+            setModal(false)
             return
         }
         alert('Senha Alterada')
-        setModal(!modal)
+        setModal(false)
     }
 
     return (
@@ -145,12 +146,12 @@ export default Perfil = () => {
                             <Text style={style.descricao}>Editar Foto</Text>
                         </Pressable>
                     )}
-                </TouchableOpacity> 
-            <TextInput
-              style={style.input}
-              value={userInfo.username}
-              onChangeText={(text) => setData({ ...userInfo, username: text })}
-            />
+                </TouchableOpacity>
+                <TextInput
+                    style={style.input}
+                    value={userInfo.username}
+                    onChangeText={(text) => setData({ ...userInfo, username: text })}
+                />
                 <Text style={style.nome}>{userInfo.nome}</Text>
                 <Text style={style.descricao}>{userInfo.sobrenome}</Text>
                 <Text style={style.descricao}>{userInfo.email}</Text>
@@ -158,37 +159,35 @@ export default Perfil = () => {
                 <Text style={style.descricao}>{userInfo.status}</Text>
 
                 <Pressable onPress={mudaSenha} style={style.butt}>
-                            <Text style={style.descricao}>Alterar Senha</Text>
-                        </Pressable>
-                        <Modal
-                            animationType="none"
-                            transparent={true}
-                            visible={modal}
-                            onRequestClose={() => {
-                                setModal(!modal);
-                            }}>
-                            <View>
-                                <View style={style.modalView}>
-                                    <TextInput
-                                        placeholder='Nova senha'
-                                        style={style.input}
-                                        onChangeText={setNovaSenha}
-                                        value={novaSenha}
-                                        secureTextEntry={true}
-                                    />
-                                    <TextInput
-                                        placeholder='Confirmar senha'
-                                        style={style.input}
-                                        onChangeText={setConfirma}
-                                        value={confirma}
-                                        secureTextEntry={true}
-                                    />
-                                    <Pressable onPress={mudaSenha} style={style.butt}>
-                                        <Text style={style.descricao}>Alterar</Text>
-                                    </Pressable>
-            </View>
-            </View>
-            </Modal>
+                    <Text style={style.descricao}>Alterar Senha</Text>
+                </Pressable>
+                <Modal
+                    animationType="none"
+                    transparent={true}
+                    visible={modal}
+                    onRequestClose={() => setModal(false)}>
+                    <View>
+                        <View style={style.modalView}>
+                            <TextInput
+                                placeholder='Nova senha'
+                                style={style.input}
+                                onChangeText={setNovaSenha}
+                                value={novaSenha}
+                                secureTextEntry={true}
+                            />
+                            <TextInput
+                                placeholder='Confirmar senha'
+                                style={style.input}
+                                onChangeText={setConfirma}
+                                value={confirma}
+                                secureTextEntry={true}
+                            />
+                            <Pressable onPress={mudaSenha} style={style.butt}>
+                                <Text style={style.descricao}>Alterar</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+                </Modal>
             </View>
         </ScrollView>
     );

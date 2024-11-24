@@ -17,7 +17,7 @@ export default Pagamento = () => {
     <View style={style.log} >
         <Image 
         style={style.image}
-        source={require('../../../assets/images/reprodutor-de-musica.png')}/>
+        source={require('../../assets/images/logo.png')}/>
         <Text style={style.logo}>PlaayShare</Text>
     </View>
         <Text style={style.text}>Conta Bancária</Text>

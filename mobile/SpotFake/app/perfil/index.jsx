@@ -2,7 +2,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { View, Text, StyleSheet, Pressable, Image, ScrollView, Modal, TouchableOpacity, TextInput } from "react-native";
 import { Link } from "expo-router";
-import { AppContext } from "../../../scripts/AppContext";
+import { AppContext } from "../../scripts/AppContext";
 //import { AdvancedImage } from "cloudinary-react-native";
 import { Cloudinary } from "@cloudinary/url-gen";
 import * as ImagePicker from 'expo-image-picker'
@@ -23,7 +23,7 @@ const options = {
 
 export default Perfil = () => {
     const { userInfo, setUserInfo } = useContext(AppContext);
-    const [image, setImage] = useState('../../../assets/images/perfil-de-usuario.png');
+    const [image, setImage] = useState('../../assets/images/logo.png');
     const [novaImagem, setNovaImagem] = useState(false);
     const [modal, setModal] = useState(false)
     const [novaSenha, setNovaSenha] = useState('')
@@ -131,12 +131,12 @@ export default Perfil = () => {
                     <Link href="/" style={style.link}>
                         <Image
                             style={style.image}
-                            source={require('../../../assets/images/seta-esquerda.png')} />
+                            source={require('../../assets/images/seta-esquerda.png')} />
                     </Link>
                     <Link href="../pagamento" style={style.link}>
                         <Image
                             style={style.image}
-                            source={require('../../../assets/images/configuracao-do-usuario.png')} />
+                            source={require('../../assets/images/configuracao-do-usuario.png')} />
                     </Link>
                 </View>
                 <TouchableOpacity onPress={pickImage}>

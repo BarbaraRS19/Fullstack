@@ -36,4 +36,4 @@ const trocaImg = async (req, res) => {
   res.status(200).send(user)
 }
 
-export { lista, deleta, pega, atualizaUser};
+export { lista, deleta, pega};

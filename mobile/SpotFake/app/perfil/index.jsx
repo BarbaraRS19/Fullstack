@@ -54,7 +54,7 @@ export default Perfil = () => {
             enviarBD(result.url);
             console.log(userInfo)
             setUserInfo({ ...userInfo, image: result.url })
-            await mudaSenha(result)
+             mudaSenha(result)
         } catch (e) {
             console.log(e);
         }
@@ -93,7 +93,6 @@ export default Perfil = () => {
             aspect: [4, 3],
             quality: 1,
         });
-        if (!result.canceled) {
         console.log(result);
         if (!result.canceled) {
             setImage(result.assets[0].uri);
@@ -247,5 +246,4 @@ const style = StyleSheet.create({
         marginTop: 5,
         marginBottom: 20,
     },
-})}
-
+})

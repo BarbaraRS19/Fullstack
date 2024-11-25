@@ -40,7 +40,6 @@ export default Perfil = () => {
             const data = {
                 "file": image,
                 "upload_preset": 'ml_default',
-                "name": 'teste'
             }
             const res = await fetch('https://api.cloudinary.com/v1_1/dtsbwcpgv/upload', {
                 method: 'POST',
@@ -50,6 +49,7 @@ export default Perfil = () => {
                 body: JSON.stringify(data)
             });
             const result = await res.json();
+            setImage(result.url);
             console.log(result.url);
             enviarBD(result.url);
             console.log(userInfo)
@@ -84,17 +84,16 @@ export default Perfil = () => {
     const pickImage = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
-            alert('Desculpe, precisamos da permissão para acessar a galeria!');
+            alert('Precisamos da permissão para acessar a galeria!');
             return;
         }
-
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
         });
-
+        if (!result.canceled) {
         console.log(result);
         if (!result.canceled) {
             setImage(result.assets[0].uri);
@@ -154,8 +153,8 @@ export default Perfil = () => {
                 />
                 <Text style={style.nome}>{userInfo.nome}</Text>
                 <Text style={style.descricao}>{userInfo.sobrenome}</Text>
+                <Text style={style.descricao}>{userInfo.dataNascimento}</Text>
                 <Text style={style.descricao}>{userInfo.email}</Text>
-                <Text style={style.descricao}>{userInfo.senha}</Text>
                 <Text style={style.descricao}>{userInfo.status}</Text>
 
                 <Pressable onPress={mudaSenha} style={style.butt}>
@@ -232,7 +231,7 @@ const style = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         textAlign: 'center',
-        fontSize: 25,
+        fontSize: 20,
         color: '#5B2C6F',
         fontFamily: 'Mystery Quest',
         marginTop: 5,
@@ -248,4 +247,5 @@ const style = StyleSheet.create({
         marginTop: 5,
         marginBottom: 20,
     },
-});
+})}
+

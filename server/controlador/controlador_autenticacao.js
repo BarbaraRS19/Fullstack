@@ -18,55 +18,20 @@ const registro = async (req, res) => {
      res.send('Esta funcionando')
  }
  
-// const login = async (req, res) => {
-//     const {email, senha} = req.body
-//     if(!email || !senha){
-//     res.send('Preencha todos os campos!')
-//     return
-//     }
-//     const userExiste = await User.findOne({where: {email: email}})
-//     if(!userExiste){
-//      res.send('Usuario nao existe')
-//      return
-//     }
-//     const senhaValida = bcryptjs.compareSync(senha, userExiste.senha)
-//     if(!senhaValida){
-//         res.send('Senha Invalida')  
-//         return
-//     }
-//     const token = jsonwebtoken.sign(
-//         {"nome_completo" : `${userExiste.nome} ${userExiste.sobrenome}`, 
-//         "email" : userExiste.email,
-//         "status" : userExiste.status},
-//         'chavecriptografiajwt',
-//         {expiresIn: 1000*60*5}
-//     )
-//     res.send({
-//         msg: "Usuario Logado",
-//         tokenJWT: token
-//     })
-//  }
 const login = async (req, res) => {
     const { email, senha } = req.body;
-    
-    // Validação de campos obrigatórios
+
     if (!email || !senha) {
         return res.status(400).send('Preencha todos os campos!');
     }
-
-    // Verificação se o usuário existe
     const userExiste = await User.findOne({ where: { email } });
     if (!userExiste) {
         return res.status(404).send('Usuário não encontrado');
     }
-
-    // Comparação da senha de forma assíncrona
     const senhaValida = await bcryptjs.compare(senha, userExiste.senha);
     if (!senhaValida) {
         return res.status(401).send('Senha inválida');
     }
-
-    // Criação do token JWT
     const token = jsonwebtoken.sign(
                 {"nome_completo" : `${userExiste.nome} ${userExiste.sobrenome}`, 
                 "email" : userExiste.email,
@@ -74,9 +39,10 @@ const login = async (req, res) => {
                 'chavecriptografiajwt',
                 {expiresIn: 1000*60*5}
             )
-            res.send({
+            res.status(200).send({
                 msg: "Usuario Logado",
-                tokenJWT: token
+                tokenJWT: token,
+                userInfo: userExiste
             })
          }
 
@@ -99,4 +65,22 @@ const login = async (req, res) => {
     res.status(200).send(user)
 }
 
-export {registro, login, mudarSenha}
+const trocaImg = async (req, res) => {
+    const user_id = req.params.id
+    const nova_img_url = req.body.url
+    if (!nova_img_url) {
+        res.status(400).send('img nao encontrada')
+        return
+    }
+    const user = await User.findOne({where:{id: user_id}})
+    if(!user){
+        res.status(404).send('User Not Found')
+        return
+    }
+    user.profile_image = nova_img_url
+    await user.save()
+    res.status(200).send(user)
+}
+
+
+export {registro, login, mudarSenha, trocaImg}

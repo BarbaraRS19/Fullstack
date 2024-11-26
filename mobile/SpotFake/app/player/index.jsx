@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, Image } from 'react-native';
+import { View, Text, Button, StyleSheet, Image, Pressable } from 'react-native';
 import { Audio } from 'expo-av';
+import { Link } from "expo-router";
 
-const PlayerScreen = () => {
+const Player = () => {
   const [sound, setSound] = useState();
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -14,7 +15,6 @@ const PlayerScreen = () => {
       );
       setSound(sound);
     };
-
     loadAudio();
 
     return () => {
@@ -24,7 +24,7 @@ const PlayerScreen = () => {
     };
   }, []);
 
-  const togglePlayback = async () => {
+  const Pausar = async () => {
     if (isPlaying) {
       await sound.pauseAsync();
     } else {
@@ -36,19 +36,26 @@ const PlayerScreen = () => {
   return (
     <View style={styles.container}>
        <View style={styles.log} >
+       <Link href="../home" style={styles.link}>
+            <Image
+            style={styles.image}
+            source={require('../../assets/images/seta-esquerda.png')} />
+                    </Link>
             <Image
             style={styles.image}
             source={require('../../assets/images/logo.png')} />
             <Text style={styles.logo}>PlaayShare</Text>
         </View>
       <Image
-        style={styles.image}
+        style={styles.imagem}
         source={require('../../assets/images/luan.png')} />
-        <Text style={styles.title}>Luan Santana - Acordando o Prédio</Text>
-      <Button
-        title={isPlaying ? 'Pausar' : 'Reproduzir'}
-        onPress={togglePlayback}
-      />
+        <Text style={styles.descricao}>Luan Santana - Acordando o Prédio</Text>
+        <Pressable style={styles.butt} onPress={Pausar}>
+      <Text style={styles.butt}>
+        {isPlaying ? 'Pausar' : 'Reproduzir'}
+      </Text>
+    </Pressable>
+      
     </View>
   );
 };
@@ -70,19 +77,17 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginBottom: 20,
     },
-    titulo: {
-        display: 'flex',
-        justifyContent: 'center',
-        textAlign: 'center',
-        fontSize: 30,
-        color: '#5B2C6F',
-        fontFamily: 'Mystery Quest',
-        marginTop: 5,
-        marginBottom: 20,
-    },
     image: {
         width: 45,
-        height: 45
+        height: 45,
+    },
+    imagem: {
+        width: 200,
+        height: 200,
+        display: 'flex',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        marginBottom: 20
     },
     log: {
         flexDirection: 'row',
@@ -91,7 +96,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         textAlign: 'center',
         marginTop: 25,
-        marginBottom: 25
+        marginBottom: 25,
     },
     logo: {
         fontSize: 60,
@@ -99,13 +104,22 @@ const styles = StyleSheet.create({
         fontFamily: 'Mystery Quest',
         marginBottom: 20,
     },
-link: {
+    link: {
     flexDirection: 'row',
-   justifyContent: 'space-around',
-   backgroundColor: '#d7bde2',
-   marginTop: 10
-}
+       gap: 40,
+       marginTop: 10,
+    },
+    butt: {
+        display: 'flex',
+        justifyContent: 'center',
+        textAlign: 'center',
+        fontSize: 40,
+        color: '#600090',
+        fontFamily: 'Mystery Quest',
+        marginTop: 5,
+        marginBottom: 20,
+    },
 })
 
-export default PlayerScreen;
+export default Player;
 

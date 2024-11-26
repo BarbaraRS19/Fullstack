@@ -73,12 +73,9 @@ const Login = () => {
                     <Link href="./registro" >
                      <Text style={style.butt2}>Cadastrar!</Text>
                  </Link>
-                     <Link href="./perfil" >
-                        <Text style={style.butt2}>perfil!</Text>
-                    </Link>
-                    <Link href="./home" >
-                        <Text style={style.butt2}>home!</Text>
-                    </Link>
+                 <Link href="./player" >
+                     <Text style={style.butt2}>play!</Text>
+                 </Link>
                 </View>
             </SafeAreaView>
         )}

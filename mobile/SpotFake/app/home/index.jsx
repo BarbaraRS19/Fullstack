@@ -11,7 +11,7 @@ export default Home = () => {
 
     const Artistas = async () => {
         try {
-            const response = await fetch('http://localhost:8000/pegarTodosArtistas/');
+            const response = await fetch('http://localhost:8000/artista/pegarTodosArtistas/');
             const data = await response.json();
             setArtistas(data);
         } catch (error) {
@@ -21,7 +21,7 @@ export default Home = () => {
 
     const Albuns = async () => {
         try {
-            const response = await fetch('http://localhost:8000/pegarAlbumsPorArtista/');
+            const response = await fetch('http://localhost:8000/album/pegarAlbumsPorArtista/');
             const data = await response.json();
             setAlbuns(data);
         } catch (error) {
@@ -47,7 +47,10 @@ export default Home = () => {
                 data={albuns}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
-                    <Text style={styles.descricao}>{item.nome}</Text>
+                    <Text style={styles.descricao}>
+                    {item.title}
+                    {item.releaseYear}
+                    {item.coverImageURL}</Text>
                 )}
             />
             <Text style={styles.titulo}>Artistas do Momento:</Text>
@@ -55,7 +58,10 @@ export default Home = () => {
                 data={artistas}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
-                    <Text style={styles.descricao}>{item.nome}</Text>
+                    <Text style={styles.descricao}>
+                    {item.nome}
+                    {item.bio}
+                    {item.imageURL}</Text>
                 )}
             />
             <View style={styles.link}>

@@ -25,13 +25,10 @@ export default Perfil = () => {
     const { userInfo, setUserInfo } = useContext(AppContext);
     const [image, setImage] = useState('../../assets/images/logo.png');
     const [novaImagem, setNovaImagem] = useState(false);
-    const [modal, setModal] = useState(false)
-    const [novaSenha, setNovaSenha] = useState('')
-    const [confirma, setConfirma] = useState('')
 
     useEffect(() => {
-        if (userInfo.image) {
-            setImage(userInfo.image)
+        if (userInfo.profile_image) {
+            setImage(userInfo.profile_image)
         }
     }, [])
 
@@ -47,40 +44,34 @@ export default Perfil = () => {
                     'content-type': 'application/json'
                 },
                 body: JSON.stringify(data)
+
             });
+
             const result = await res.json();
             setImage(result.url);
-            console.log(result.url);
-            enviarBD(result.url);
-            console.log(userInfo)
-            setUserInfo({ ...userInfo, image: result.url })
-             mudaSenha(result)
+            setUserInfo({ ...userInfo, profile_image: result.url })
+            await enviarBD(result)
         } catch (e) {
             console.log(e);
         }
     };
 
-    const enviarBD = async (url) => {
-        try {
-            const res = await fetch('http://localhost:8000/', {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify({ url: url })
-            });
-            const resData = await res.json();
-            console.log(resData);
-            if (res.status === 200) {
-                console.log('Imagem enviada com sucesso!');
-            } else if (res.status === 409) {
-                console.log('Erro');
-            }
-        } catch (e) {
-            console.log('Erro', e);
+    const enviarBD = async (result) => {
+        const response = await fetch(`http://localhost:8000/usuarios/trocaImg/${userInfo.id}`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ url: result.url })
+        });
+        if (response.status === 200) {
+            await response.json()
+            alert('Imagem atualizada com sucesso')
+            return
         }
-    };
-
+        alert('Houve um erro ao atualizar a imagem')
+    }
     const pickImage = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
@@ -93,34 +84,12 @@ export default Perfil = () => {
             aspect: [4, 3],
             quality: 1,
         });
-        console.log(result);
         if (!result.canceled) {
             setImage(result.assets[0].uri);
             setNovaImagem(true);
         }
     };
-
-    const mudaSenha = async () => {
-        if (novaSenha !== confirma) {
-            alert('Senhas Distintas')
-            return
-        }
-        console.log(userInfo)
-        const res = await fetch(`http://localhost:8000/autenticacao/mudarSenha/${userInfo.id}`, {
-            method: 'PUT',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify({ novaSenha: novaSenha })
-        });
-        if (res.status != 200) {
-            alert('Ocorreu um Erro')
-            setModal(false)
-            return
-        }
-        alert('Senha Alterada')
-        setModal(false)
-    }
+    
 
     return (
         <ScrollView style={style.container}>
@@ -155,37 +124,6 @@ export default Perfil = () => {
                 <Text style={style.descricao}>{userInfo.dataNascimento}</Text>
                 <Text style={style.descricao}>{userInfo.email}</Text>
                 <Text style={style.descricao}>{userInfo.status}</Text>
-
-                <Pressable onPress={mudaSenha} style={style.butt}>
-                    <Text style={style.descricao}>Alterar Senha</Text>
-                </Pressable>
-                <Modal
-                    animationType="none"
-                    transparent={true}
-                    visible={modal}
-                    onRequestClose={() => setModal(false)}>
-                    <View>
-                        <View style={style.modalView}>
-                            <TextInput
-                                placeholder='Nova senha'
-                                style={style.input}
-                                onChangeText={setNovaSenha}
-                                value={novaSenha}
-                                secureTextEntry={true}
-                            />
-                            <TextInput
-                                placeholder='Confirmar senha'
-                                style={style.input}
-                                onChangeText={setConfirma}
-                                value={confirma}
-                                secureTextEntry={true}
-                            />
-                            <Pressable onPress={mudaSenha} style={style.butt}>
-                                <Text style={style.descricao}>Alterar</Text>
-                            </Pressable>
-                        </View>
-                    </View>
-                </Modal>
             </View>
         </ScrollView>
     );
